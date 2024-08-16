@@ -1,5 +1,21 @@
 const { productModel } = require("../models/productModel");
 const {productSupplierModel} = require("../models/productSupplierModel")
+const {stockValueHistoryModel} = require("../models/reportingModels")
+const UpdatestockValueHistory = async (req,res,quantity)=> {
+    try{
+        const latestStockValueHistory = await stockValueHistoryModel.find({}).sort({_id: -1});
+        const prevStock =(latestStockValueHistory.length>0?latestStockValueHistory[0].total_stock_value:0)
+        console.log({prevStock,quantity});
+        const newStockValueHistory = new stockValueHistoryModel({total_stock_value: prevStock+quantity});
+
+        await newStockValueHistory.save();
+    }catch(error){
+        res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
 
 exports.createProduct = async (req,res)=>{
     try{
@@ -9,6 +25,7 @@ exports.createProduct = async (req,res)=>{
         await newProduct.save();
         const newProductSupplier = new productSupplierModel({product_id:newProduct._id,supplier_id})
         await newProductSupplier.save();
+        UpdatestockValueHistory(req,res,current_stock);
 
         res.status(201).json({
             success:true,

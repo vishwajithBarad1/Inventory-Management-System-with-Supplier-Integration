@@ -4,6 +4,7 @@
 
 This project involves building a full-stack inventory management system that allows businesses to track inventory levels, manage orders, and automatically reorder products from suppliers when stock levels are low. The system will consist of a React-based frontend for user interaction, a Node.js backend API for business logic, a SQL or MongoDB database for data storage, Redis for caching frequently accessed data, and Docker for containerization and deployment. This project is designed to integrate all these technologies in a way that is both functional and efficient.
 
+
 ### Project Components
 
 #### 1. **Frontend (React)**

@@ -12,7 +12,8 @@ const orderSchema = mongoose.Schema({
         },
         order_date:{
             type:Date,
-            require:true
+            require:true,
+            default:Date.now()
         },
         status:{
             type:String,
