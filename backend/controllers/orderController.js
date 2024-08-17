@@ -1,6 +1,6 @@
 const { orderModel } = require("../models/orderModel");
 const {productModel} = require("../models/productModel");
-const {inventoryMovementModel,stockValueHistoryModel,supplierPerformanceModel} = require("../models/reportingModels");
+const {inventoryMovementModel,stockValueHistoryModel} = require("../models/reportingModels");
 
 const checkStock = async (req,res,product_id,quantity)=>{
     const product = await productModel.find({_id:product_id});
