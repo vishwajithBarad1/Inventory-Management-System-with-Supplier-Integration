@@ -1,6 +1,7 @@
 const { productModel } = require("../models/productModel");
-const {productSupplierModel} = require("../models/productSupplierModel")
-const {stockValueHistoryModel} = require("../models/reportingModels")
+const {productSupplierModel} = require("../models/productSupplierModel");
+const {stockValueHistoryModel} = require("../models/reportingModels");
+
 const UpdatestockValueHistory = async (req,res,quantity)=> {
     try{
         const latestStockValueHistory = await stockValueHistoryModel.find({}).sort({_id: -1});

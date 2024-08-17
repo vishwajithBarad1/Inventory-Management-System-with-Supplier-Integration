@@ -8,7 +8,8 @@ exports.createSupplier = async (req,res)=>{
         await newSupplier.save();
         res.status(201).json({
             success:true,
-            message:"created a supplier successfully"
+            message:"created a supplier successfully",
+            supplier:newSupplier
         })
     }catch(error){
         res.status(500).json({
