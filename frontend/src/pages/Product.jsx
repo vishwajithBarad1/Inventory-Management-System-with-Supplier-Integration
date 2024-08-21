@@ -48,7 +48,7 @@ function Product(){
                 <button className='logout' onClick={handleLogout}>logout</button>
             </div>
             <ProductDetails name={"name"} sku={"sku"} description={"description"} price={"price"} current_stock={"current_stock"} productPage={true} header={true}></ProductDetails>
-            {products.map((product) =>{return <ProductDetails productId = {product._id} name={product.name} sku={product.sku} description={product.description} price={product.price} current_stock={product.current_stock} stock={product.stock} productSKU={productSKU} setProductSKU = {setProductSKU} productPage={true} />})}
+            {products.map((product) =>{return <ProductDetails productId = {product._id} name={product.name} sku={product.sku} description={product.description} price={product.price} current_stock={product.current_stock} stock={product.stock} productSKU={productSKU} setProductSKU = {setProductSKU} productPage={true} getAllProducts={getAllProducts} />})}
             
         </div>
     )
