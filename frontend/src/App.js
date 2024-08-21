@@ -1,10 +1,25 @@
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from "./pages/LoginPage";
+import DashBoard from './pages/DashBoard';
+import Product from './pages/Product';
+
+// import AboutPage from './AboutPage';
+// import ContactPage from './ContactPage';
 
 function App() {
   return (
-    <div className="App">
-      hello World
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage/>}/>
+        <Route path="/dashboard" element={<DashBoard />} />
+        <Route path="/Product" element={<Product />} />
+        <Route path="/Orders" element={<DashBoard />} />
+        <Route path="/Suppliers" element={<DashBoard />} />
+        <Route path="/Reports" element={<DashBoard />} />
+
+      </Routes>
+    </Router>
   );
 }
 
