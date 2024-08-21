@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "../styles/loginpage.css"
@@ -36,7 +36,12 @@ function LoginPage() {
         }
     }
   };
-
+  useEffect(()=>{
+    if(localStorage.getItem('authToken')){
+      navigate("/dashboard");
+      return;
+    }
+  },[])
   return (
     <div className='container'>
     <div className='loginContainer'>
