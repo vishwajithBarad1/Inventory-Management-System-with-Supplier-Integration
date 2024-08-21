@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../styles/ProductDetails.css"
 import axios from "axios"
 import { useEffect } from "react";
-function ProductDetails({productId,name,sku,description,price,current_stock,stock,productSKU,productPage,setProductSKU, header}){
+function ProductDetails({productId,name,sku,description,price,current_stock,stock,productSKU,productPage,setProductSKU, header,getAllProducts}){
     const [Name, setName] = useState(name);
     const [Sku, setSku] = useState(sku);
     const [Description, setDescription] = useState(description);
@@ -25,6 +25,7 @@ function ProductDetails({productId,name,sku,description,price,current_stock,stoc
                     }
                   }
                 )
+                getAllProducts();
         }catch(error){
             console.error(error);
             alert("An error occurred while saving the changes. Please try again later.");
@@ -33,6 +34,18 @@ function ProductDetails({productId,name,sku,description,price,current_stock,stoc
     async function handleDelete(){
         // Delete product here
         setProductSKU(null);
+        try{
+            await axios.delete(`http://localhost:4000/product/deleteProduct?id=${productId}`,{
+                headers: {
+                  Authorization: localStorage.getItem("authToken")
+                }
+              }
+            )
+            getAllProducts();
+        }catch(error){
+            console.error(error);
+            alert("An error occurred while deleting the product. Please try again later.");
+        }
     }
     function handleEdit(){
         setProductSKU(sku);
@@ -52,7 +65,7 @@ function ProductDetails({productId,name,sku,description,price,current_stock,stoc
                 <input className="product_values" type="text" value={Description} onChange={(event)=>{setDescription(event.target.value);}}/>
                 <input className="product_values" type="number" value={Price} onChange={(event)=>{setPrice(event.target.value);}}/>
                 <input className="product_values" type="number" value={CurrentStock} onChange={(event)=>{setCurrentStock(event.target.value);}}/>
-                <button className="product_values" style={{backgroundColor: 'Violet'}} onClick={handleSubmit}>submit</button>
+                <button className="product_values" style={{backgroundColor: 'Violet'}} ><button className="edit" onClick={handleSubmit}>submit</button><button className="delete" onClick={()=>{getAllProducts()}}>cancel</button></button>
                 </div>
         :<div className="values_container">
             <div className="product_values">{name}</div>
