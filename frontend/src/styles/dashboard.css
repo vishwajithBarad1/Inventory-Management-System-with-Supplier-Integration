@@ -84,3 +84,9 @@
   display: flex;
   gap: 10px;
 }
+
+hr{
+  margin: 50px 0px -70px 0px;
+  border: 2px solid rgb(84, 84, 84);
+  border-radius: 5px;
+}
