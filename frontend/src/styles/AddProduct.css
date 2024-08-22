@@ -23,6 +23,7 @@ input{
     border: 1px solid rgba(255, 255, 255);
 }
 .submitButton{
+    text-align: center;
     border: 1px black solid;
     width: 200px;
     height: 30px;
@@ -32,4 +33,10 @@ input{
     border-radius: 10px;
     font-family: Arial, Helvetica, sans-serif;
     margin: 10px auto 0px auto;
+    cursor: pointer;
+}
+
+.addSupplierContainer{
+    width : 400px;
+    margin: 100px auto 0px auto;
 }
