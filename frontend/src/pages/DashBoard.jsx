@@ -16,7 +16,6 @@ function DashBoard() {
                 totalBelowReorder++;
             }
         })
-        console.log(value);
         setTotalStock(value);
         setTotalBelowReorder(totalBelowReorder)
     }
