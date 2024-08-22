@@ -90,7 +90,7 @@ exports.createOrder = async (req,res)=>{
 
 exports.getAllOrders = async (req,res)=>{
     try{
-        const allOrders = await orderModel.find({});
+        const allOrders = await orderModel.find({}).populate('product_id');;
         res.status(200).json({
             success:true,
             data:allOrders
