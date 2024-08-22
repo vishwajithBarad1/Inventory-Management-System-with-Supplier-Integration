@@ -41,7 +41,7 @@ function Product(){
                     <button onClick={() => navigate('/orders')} className="dashboard-button">Orders</button>
                     <button onClick={() => navigate('/reports')} className="dashboard-button">Reports</button>
                 </div>
-                <h1 style={{margin:"50px auto -30px auto"}}>Product details</h1>
+                <h1 className = "dashboard-title" style={{margin:"50px auto 0px auto"}}>Product details</h1>
                 <AddProduct/>
             </div>
             <div>
@@ -49,7 +49,6 @@ function Product(){
             </div>
             <ProductDetails name={"name"} sku={"sku"} description={"description"} price={"price"} current_stock={"current_stock"} productPage={true} header={true}></ProductDetails>
             {products.map((product) =>{return <ProductDetails productId = {product._id} name={product.name} sku={product.sku} description={product.description} price={product.price} current_stock={product.current_stock} stock={product.stock} productSKU={productSKU} setProductSKU = {setProductSKU} productPage={true} getAllProducts={getAllProducts} />})}
-            
         </div>
     )
 }
