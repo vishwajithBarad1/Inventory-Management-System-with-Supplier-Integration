@@ -42,3 +42,11 @@
     border-radius: 5px;
     padding:5px 10px;
 }
+
+.supplierContainer{
+    margin: 50px auto 0px auto;
+    border: 5px solid rgb(70, 70, 70);
+    box-shadow: 10px 10px 10px rgb(250, 183, 255);
+    width: 80%;
+    border-radius: 10px;
+}
