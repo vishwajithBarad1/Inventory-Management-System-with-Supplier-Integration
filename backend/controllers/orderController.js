@@ -38,25 +38,26 @@ const checkStock = async (req,res,product_id,quantity)=>{
     }
 }
 
-const UpdatestockValueHistory = async (req,res,quantity)=> {
+const UpdatestockValueHistory = async (quantity)=> {
     try{
         const latestStockValueHistory = await stockValueHistoryModel.find({}).sort({_id: -1});
         const prevStock =(latestStockValueHistory.length>0?latestStockValueHistory[0].total_stock_value:0)
         const newStockValueHistory = new stockValueHistoryModel({total_stock_value: prevStock-quantity});
         await newStockValueHistory.save();
     }catch(error){
-        res.status(500).json({
-            success:false,
-            message:error.message
-        })
+        throw new Error(error.message);
     }
 }
 
 const updateStockLevel= async (id,value,quantity)=>{
-    if(value=="Cancel"){
-        const product = await productModel.find({_id:id});
-        product[0].current_stock+=quantity;
-        await product[0].save();
+    try{
+        if(value=="Cancel"){
+            const product = await productModel.find({_id:id});
+            product[0].current_stock+=quantity;
+            await product[0].save();
+        }
+    }catch(error){
+        throw new Error(error.message);
     }
 }
 
@@ -79,12 +80,10 @@ exports.createOrder = async (req,res)=>{
             })
         }
     }catch(error){
-        if (!res.headersSent) {
-            res.status(500).json({
-                success: false,
-                message: error.message
-            });
-        }
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 }
 
@@ -112,12 +111,12 @@ exports.changeStatus = (value)=>{
             UpdatestockValueHistory(req,res,order.quantity);
             const response = await orderModel.updateOne({_id:id},{status:value})
             if(!response.matchedCount){
-                res.status(404).json({
+                return res.status(404).json({
                     success:false,
                     message:"cannot find the order"
                 })
             }else{
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     message: "order updated successfully"
                 });

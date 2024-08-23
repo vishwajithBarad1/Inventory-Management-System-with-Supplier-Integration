@@ -2,14 +2,14 @@
     display: flex;
     justify-content: space-between;
     margin: 50px 0px 10px -10px;
-    background-color: aqua;
+    background-color: #FFDBB5;
     padding: 10px;
     border-radius: 15px;
 }
 
 input{
     flex: 1;
-    background-color: rgba(191, 255, 255, 0.953);
+    background-color: #f6e0c9dd;
     font-size: 18px;
     width : 150px;
     border: 1px solid rgba(255, 255, 255);
@@ -17,19 +17,19 @@ input{
 }
 .supplier{
     flex: 1;
-    background-color: rgba(191, 255, 255, 0.953);
     font-size: 18px;
     width : 150px;
     border: 1px solid rgba(255, 255, 255);
 }
 .submitButton{
+    color:white;
     text-align: center;
     border: 1px black solid;
     width: 200px;
     height: 30px;
     font-size: 20px;
     padding-top: 7px;
-    background-color: rgb(255, 213, 0);
+    background-color: #603F26;
     border-radius: 10px;
     font-family: Arial, Helvetica, sans-serif;
     margin: 10px auto 0px auto;

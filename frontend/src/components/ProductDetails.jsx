@@ -54,7 +54,7 @@ function ProductDetails({productId,name,sku,description,price,current_stock,stoc
         setProductSKU(sku);
     }
     function getBackgroundColor(stock_value){
-        if(stock_value==="current_stock"){return "pink";}
+        if(stock_value==="current_stock"){return "#FFDBB5";}
         if((stock_value/stock)*100 <=25){return "red";}
         if((stock_value/stock)*100 <=50){return "orange";}
         if((stock_value/stock)*100 <=75){return "yellow";}

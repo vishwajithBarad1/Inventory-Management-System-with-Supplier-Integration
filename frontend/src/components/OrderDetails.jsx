@@ -39,16 +39,17 @@ function OrderDetails({orderId, product_id, quantity, order_date, status, getAll
         <div className="values_container" onMouseLeave={handleMouseLeave}> 
             {showDetail?
             <div>
-                <div className="product_values" style={{paddingTop:"25px",width:"208px"}}>{product_id.name}</div>
+                <div className="product_values" style={{width:"211px"}}>{product_id.name}</div>
                 <div style={{
                     position:"relative",
-                    backgroundColor: "rgba(255,255,255)",
                     border: '1px solid #ccc',
                     boxShadow: '0 0 10px rgba(0,0,0,0.5)',
                     width: '200px',
-                    padding:"10px",
                     left:"170px",
-                    marginBottom: '-300px',}}
+                    marginBottom: '-300px',
+                    borderRadius:"10px",
+                    padding: '10px',
+                    backdropFilter: "blur(5px)"}}
                     >
                         <strong>{product_id.name}</strong>
                         <p>SKU: {product_id.sku}</p>
