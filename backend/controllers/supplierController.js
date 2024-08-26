@@ -88,8 +88,7 @@ exports.deleteSupplier = async (req,res)=>{
 
 exports.supplierProductDetails = async (req,res)=>{
     try{
-        const P_S_details = await productSupplierModel.find({}).populate("product_id").populate("supplier_id");;
-        P_S_details
+        const P_S_details = await productSupplierModel.find({}).populate("product_id").populate("supplier_id");
         res.status(200).json({
             success:true,
             message:"successfully fetched all the details in populated raw format",
