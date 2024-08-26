@@ -1,10 +1,19 @@
 .inputBar{
     display: flex;
     justify-content: space-between;
-    margin: 50px 0px 10px -10px;
+    margin: 50px 0px 20px 0px;
     background-color: #FFDBB5;
     padding: 10px;
     border-radius: 15px;
+}
+
+.inputBar input{
+    flex: 1;
+    background-color: #f6e0c9dd;
+    font-size: 18px;
+    width : 130px;
+    border: 1px solid rgba(255, 255, 255);
+    margin: 0px 5px;
 }
 
 input{
@@ -13,13 +22,15 @@ input{
     font-size: 18px;
     width : 150px;
     border: 1px solid rgba(255, 255, 255);
-
+    margin: 0px 5px;
 }
 .supplier{
     flex: 1;
     font-size: 18px;
     width : 150px;
     border: 1px solid rgba(255, 255, 255);
+    background-color: #f6e0c9dd;
+    color: rgb(126, 126, 126);
 }
 .submitButton{
     color:white;
@@ -37,6 +48,15 @@ input{
 }
 
 .addSupplierContainer{
-    width : 400px;
-    margin: 100px auto 0px auto;
+    width : 600px;
+    margin: 0px auto;
+}
+
+.selectProduct{
+    width: 400px;
+    border: 1px solid rgba(255, 255, 255);
+    font-size: 18px;
+    margin: 0px 5px;
+    padding: 5px;
+    background-color: #f6e0c9dd;
 }

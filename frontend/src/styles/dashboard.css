@@ -51,26 +51,27 @@
   }
   
 .logout{
-  margin: 0px 10px 0px 98%;
   cursor: pointer;
   padding: 5px 10px;
-  background-color: dimgray;
-  color: white;
+  background-color: rgb(255, 255, 255);
+  color: rgb(36, 36, 36);
   border: none;
   border-radius: 5px;
   position: absolute;
   top:40px;
-  right: 30px;
+  right: 40px;
   font-size: 18px;
+  box-shadow: 2px 2px 2px#4f4f4f;
 }
+
 
 .inventoryValues{
   margin: 10px;
-  border: 2px solid black;
+  border: 1px solid black;
   padding: 10px 20px;
   border-radius: 19.5px;
   color: wheat;
-  background-color: #4f4f4f;
+  background-color: #6c4e31;
   font-size: 18px;
 }
 
@@ -86,7 +87,68 @@
 }
 
 hr{
-  margin: 50px 0px -70px 0px;
+  margin: 50px 0px 0px 0px;
   border: 2px solid rgb(84, 84, 84);
   border-radius: 5px;
+}
+
+.stockValueOverTime-container{
+  /* style={{width:"600px", backgroundColor:"#FFE9", borderRadius:"10px",padding:"5px"}} */
+  width: 500px;
+  background-color: #ffe9;
+  border-radius: 10px;
+  padding: 5px;
+  margin :20px;
+}
+
+.reports-container{
+  display: flex;
+  justify-content: space-around;
+}
+
+.inventory-movement-container{
+  width: 500px;
+  background-color: #ffe9;
+  border-radius: 10px;
+  padding: 5px;
+  margin :20px;
+
+}
+
+.floating-window{
+  position: relative;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  width: 300px;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  text-align: center;
+  padding-right: 40px;
+}
+
+.productList{
+  border: 1px solid rgb(150, 150, 150);
+  width: 500px;
+  margin: 20px;
+  padding: 10px;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 20px;
+  background-color: #fec590;
+  border-radius: 10px;
+  color: #603F26;
+}
+
+.mostSoldItems-Container{
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px 0px 0px;
+  background-color: #fec5907a;
+  padding:0px 550px;
+  border-radius: 10px;
+}
+
+.mostSoldItems-Container h2{
+  font-family: 'Courier New', Courier, monospace;
+  color: #603F26;
 }
