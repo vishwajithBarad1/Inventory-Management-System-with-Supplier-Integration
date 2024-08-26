@@ -1,15 +1,15 @@
 const { productModel } = require("../models/productModel");
 const {productSupplierModel} = require("../models/productSupplierModel");
 const {stockValueHistoryModel} = require("../models/reportingModels");
+const { supplierModel } = require("../models/supplierModel");
 
 const UpdatestockValueHistory = async (req,res,quantity)=> {
     try{
         const latestStockValueHistory = await stockValueHistoryModel.find({}).sort({_id: -1});
         const prevStock =(latestStockValueHistory.length>0?latestStockValueHistory[0].total_stock_value:0)
-        console.log({prevStock,quantity});
-        const newStockValueHistory = new stockValueHistoryModel({total_stock_value: prevStock+quantity});
-
+        const newStockValueHistory = new stockValueHistoryModel({total_stock_value: Number(prevStock)+Number(quantity)});
         await newStockValueHistory.save();
+
     }catch(error){
         res.status(500).json({
             success:false,
@@ -26,6 +26,7 @@ exports.createProduct = async (req,res)=>{
         await newProduct.save();
         const newProductSupplier = new productSupplierModel({product_id:newProduct._id,supplier_id})
         await newProductSupplier.save();
+        await supplierModel.updateOne({_id:supplier_id},{ $push: {productsSupplied:newProduct._id}});
         UpdatestockValueHistory(req,res,current_stock);
 
         res.status(201).json({
@@ -69,7 +70,13 @@ exports.updateProduct = async (req,res)=>{
         if (reorder_level !== undefined) updateObj.reorder_level = reorder_level;
         if (supplier_id !== undefined) updateObj.supplier_id = supplier_id;
 
-        const response = await productModel.updateOne({_id:id},updateObj)
+        const response = await productModel.updateOne({_id:id},updateObj);
+        
+        const product = await productModel.findById(id);
+        if(!(current_stock - product.current_stock)){
+            await UpdatestockValueHistory(req,res,current_stock - product.current_stock);
+        }
+        
         if(!response.matchedCount){
             res.status(404).json({
                 success:false,
@@ -92,6 +99,8 @@ exports.updateProduct = async (req,res)=>{
 exports.deleteProduct = async (req,res)=>{
     try{
         const id = req.query.id;
+        const product = await productModel.findById(id);
+        await UpdatestockValueHistory(req,res,(-1*product.current_stock));
         const response = await productModel.updateOne({_id:id},{isDeleted:true})
         if(!response.matchedCount){
             res.status(404).json({
