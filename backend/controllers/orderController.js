@@ -20,7 +20,7 @@ const checkStock = async (req,res,product_id,quantity)=>{
         const newInventoryMovement = new inventoryMovementModel({
             product_id,
             movement_type:"restock",
-            quantity:product[0].stock
+            quantity:(product[0].stock)
         });
         await newInventoryMovement.save();
     }else{
@@ -68,7 +68,7 @@ exports.createOrder = async (req,res)=>{
         await checkStock(req,res,product_id,quantity);
         if (!res.headersSent) {
             // Ensure the stock is updated before proceeding
-            await UpdatestockValueHistory(req,res,quantity);
+            await UpdatestockValueHistory(quantity);
             // If checkStock did not send a response, continue to create the order
             const newOrder = new orderModel({product_id, quantity, order_date});
             await newOrder.save();
@@ -107,8 +107,8 @@ exports.changeStatus = (value)=>{
         try{
             const id = req.query.id;
             const order = await orderModel.find({_id:id});
-            updateStockLevel(id,value,order.quantity);
-            UpdatestockValueHistory(req,res,order.quantity);
+            updateStockLevel(id,value,order[0].quantity);
+            UpdatestockValueHistory(order[0].quantity);
             const response = await orderModel.updateOne({_id:id},{status:value})
             if(!response.matchedCount){
                 return res.status(404).json({
