@@ -8,6 +8,8 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require("./routes/orderRoutes");
 const supplierRoutes = require("./routes/supplierRoutes");
+const reportingRoutes = require("./routes/reportingRoutes");
+
 const {protect} = require("./middlewares/auth")
 const app = express();
 
@@ -18,6 +20,8 @@ app.use("/user",userRoutes);
 app.use("/supplier",protect,supplierRoutes);
 app.use("/product",protect,productRoutes);
 app.use("/order",protect,orderRoutes);
+app.use("/report",protect,reportingRoutes);
+
 
 app.listen( process.env.PORT,()=>{
     console.log("your server is listining on port",process.env.PORT)
