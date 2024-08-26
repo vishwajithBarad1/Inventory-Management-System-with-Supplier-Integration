@@ -5,7 +5,7 @@ import DashBoard from './pages/DashBoard';
 import Product from './pages/Product';
 import SuppliersPage from './pages/SuppliersPage';
 import OrdersPage from './pages/OrdersPage';
-
+import ReportsPage from './pages/ReportsPage';
 function App() {
   return (
     <Router>
@@ -15,7 +15,7 @@ function App() {
         <Route path="/Product" element={<Product />} />
         <Route path="/Orders" element={<OrdersPage />} />
         <Route path="/Suppliers" element={<SuppliersPage />} />
-        <Route path="/Reports" element={<DashBoard />} />
+        <Route path="/Reports" element={<ReportsPage />} />
 
       </Routes>
     </Router>
