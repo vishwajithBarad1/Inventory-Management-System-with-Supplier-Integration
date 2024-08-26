@@ -51,7 +51,7 @@ function SupplierDetails({supplierId,name,contact_info, header,getAllSuppliers,s
             <div className="values_container">
                 <input className="product_values" type="text" value={name} onChange={(event)=>{setName(event.target.value);}}/>
                 <input className="product_values" type="text" value={ContactInfo} onChange={(event)=>{setContactInfo(event.target.value);}}/>
-                <div className="product_values" style={{backgroundColor: 'Violet'}} ><button className="edit" onClick={handleSubmit}>submit</button><button className="delete" onClick={handleCancel}>cancel</button></div>
+                <div className="product_values" style={{backgroundColor: '#fec590'}} ><button className="edit" onClick={handleSubmit}>submit</button><button className="delete" onClick={handleCancel}>cancel</button></div>
                 </div>
         :<div className="values_container">
             <div className="product_values">{name}</div>
