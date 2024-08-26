@@ -10,6 +10,10 @@ const supplierSchema = mongoose.Schema({
             type:String,
             require:true
         },
+        productsSupplied:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product' // Reference to the Product schema if you have one
+        }],
         isDeleted:{
             type:Boolean,
             default:false
