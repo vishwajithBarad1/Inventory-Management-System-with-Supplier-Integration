@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 import "../styles/AddProduct.css"
 import axios from "axios";
-function AddProduct(){
+function AddProduct({getAllProducts}){
     const [name,setName] = useState("");
     const [SKU,setSKU] = useState("");
     const [description,setDescription] = useState("");
@@ -45,8 +45,15 @@ function AddProduct(){
                     Authorization: localStorage.getItem("authToken")
                   }
                 }
-              );              
-            console.log(response.data);
+              );
+            getAllProducts();
+            setName("");
+            setSKU("");
+            setDescription("");
+            setPrice("");
+            setCurrentStock("");
+            setReorderLevel("");
+            setSupplierId("");
         }catch(e){
             console.error("Error creating product",e);
             alert("Error creating product")
@@ -60,12 +67,12 @@ function AddProduct(){
     return(
         <div>
             <div className="inputBar">
-                <input type="text" placeholder="Name" onChange={(event)=>{setName(event.target.value);}}/>
-                <input type="text" placeholder="SKU" onChange={(event)=>{setSKU(event.target.value);}}/>
-                <input type="text" placeholder="Description" onChange={(event)=>{setDescription(event.target.value);}}/>
-                <input type="number" placeholder="CurrentStock" onChange={(event)=>{setCurrentStock(event.target.value);}}/>
-                <input type="number" placeholder="Price" onChange={(event)=>{setPrice(event.target.value);}}/>
-                <input type="number" placeholder="ReorderLevel" onChange={(event)=>{setReorderLevel(event.target.value);}}/>
+                <input type="text" placeholder="Name" value={name} onChange={(event)=>{setName(event.target.value);}}/>
+                <input type="text" placeholder="SKU" value={SKU} onChange={(event)=>{setSKU(event.target.value);}}/>
+                <input type="text" placeholder="Description" value={description} onChange={(event)=>{setDescription(event.target.value);}}/>
+                <input type="number" placeholder="CurrentStock" value={currentStock} onChange={(event)=>{setCurrentStock(event.target.value);}}/>
+                <input type="number" placeholder="Price" value={price} onChange={(event)=>{setPrice(event.target.value);}}/>
+                <input type="number" placeholder="ReorderLevel" value={reorderLevel} onChange={(event)=>{setReorderLevel(event.target.value);}}/>
                 <select className="supplier" onChange={handleChange}><option value="supplierName">supplier Name</option>{suppliers.map((supplier)=>{return <option value={supplier._id}>{supplier.name}</option>})}</select>
             </div>
             <div className="submitButton" onClick={createNewProduct}>
