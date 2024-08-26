@@ -38,6 +38,7 @@ function SuppliersPage() {
                 <div className="dashboard-buttons">
                     <button onClick={() => navigate('/dashboard')} className="dashboard-button">Dashboard</button>
                     <button onClick={() => navigate('/product')} className="dashboard-button">Products</button>
+                    <button onClick={() => navigate('/suppliers')} className="dashboard-button">Suppliers</button>
                     <button onClick={() => navigate('/orders')} className="dashboard-button">Orders</button>
                     <button onClick={() => navigate('/reports')} className="dashboard-button">Reports</button>
                 </div>
