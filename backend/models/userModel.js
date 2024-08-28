@@ -30,7 +30,7 @@ const userModel = mongoose.model("User",userSchema);
 
 const checkPassword = async function (name,pswd){
     const user = await userModel.find({username:name});
-    if(!user){
+    if(!user[0]){
         return false;
     }else{
         return await bcrypt.compare(pswd,user[0].password);
