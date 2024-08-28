@@ -1,9 +1,16 @@
 const {userModel,checkPassword} = require('../models/userModel');
 const {createToken} = require("../middlewares/auth")
-
+const {authSchema} = require("../middlewares/validationSchema");
 exports.createUser = async (req,res)=>{
     try{
         const {name,password,role} = req.body;
+        const result = await authSchema.validateAsync({name,password});
+        if(result.error){
+            return res.status(400).json({
+                successes:false,
+                message:result.error.details[0].message
+            })
+        }
         const token = await createToken({name,role});
         const newUser = new userModel({
             username:name,
