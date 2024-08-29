@@ -116,18 +116,19 @@ exports.deleteProduct = async (req,res)=>{
         const id = req.query.id;
         const product = await productModel.findById(id);
         await UpdatestockValueHistory(req,res,(-1*product.current_stock));
-        const response = await productModel.updateOne({_id:id},{isDeleted:true})
-        if(!response.matchedCount){
-            res.status(404).json({
-                success:false,
-                message:"cannot find the product"
-            })
-        }else{
-            res.status(200).json({
-                success:true,
-                message:"successfully deleted the product"
-            })
-        }
+        const response = await productModel.findById(id)
+        const supplier_id = response.supplier_id
+        response.isDeleted = true
+        await response.save()
+        console.log(response);
+        const result = await supplierModel.updateOne(
+            { _id: supplier_id }, // Filter criteria to find the supplier
+            { $pull: { productsSupplied: response._id } } // Update operation to remove the productId
+        );
+        res.status(200).json({
+            success:true,
+            message:"successfully deleted the product"
+        })
     }catch(error){
         res.status(500).json({
             success:false,
