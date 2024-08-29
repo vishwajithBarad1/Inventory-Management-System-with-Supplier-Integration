@@ -1,3 +1,4 @@
+const { orderSchema } = require("../middlewares/validationSchema");
 const { orderModel } = require("../models/orderModel");
 const {productModel} = require("../models/productModel");
 const {inventoryMovementModel,stockValueHistoryModel} = require("../models/reportingModels");
@@ -64,6 +65,13 @@ const updateStockLevel= async (id,value,quantity)=>{
 exports.createOrder = async (req,res)=>{
     try{
         const {product_id, quantity, order_date} = req.body;
+        const result = await orderSchema.validateAsync({product_id, quantity});
+        if(result.error){
+            return res.status(400).json({
+                success: false,
+                message: result.error.details[0].message
+            });
+        }
         // Check stock availability and proceed with order creation
         await checkStock(req,res,product_id,quantity);
         if (!res.headersSent) {

@@ -1,11 +1,22 @@
 const { supplierModel } = require("../models/supplierModel");
-const {productSupplierModel} = require("../models/productSupplierModel")
+const {productSupplierModel} = require("../models/productSupplierModel");
+const { supplierSchema } = require("../middlewares/validationSchema");
 
 exports.createSupplier = async (req,res)=>{
     try{
         const {name,contact_info} = req.body;
+
+        const response = await supplierSchema.validateAsync({name,contact_info})
+        if(response.error){
+            return res.status(400).json({
+                success:false, 
+                message:response.error.details[0].message
+            });
+        }
+
         const newSupplier = new supplierModel({name, contact_info});
         await newSupplier.save();
+        
         res.status(201).json({
             success:true,
             message:"created a supplier successfully",
@@ -42,6 +53,14 @@ exports.updateSupplier = async (req,res)=>{
         const updateObj = {};
         if (name !== undefined) updateObj.name = name;
         if (contact_info !== undefined) updateObj.contact_info = contact_info;
+
+        const result = await supplierSchema.validateAsync(updateObj)
+        if(result.error){
+            return res.status(400).json({
+                success:false, 
+                message:result.error.details[0].message
+            });
+        }
 
         const response = await supplierModel.updateOne({_id:id},updateObj)
         if(!response.matchedCount){
