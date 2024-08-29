@@ -1,5 +1,6 @@
 require("dotenv").config()
 const {mongoose} = require('./db/connectDB')
+const client = require("./db/connectRedis");
 
 const cors = require("cors");
 const express = require("express");
