@@ -1,3 +1,4 @@
+const { productSchema } = require("../middlewares/validationSchema");
 const { productModel } = require("../models/productModel");
 const {productSupplierModel} = require("../models/productSupplierModel");
 const {stockValueHistoryModel} = require("../models/reportingModels");
@@ -21,7 +22,13 @@ const UpdatestockValueHistory = async (req,res,quantity)=> {
 exports.createProduct = async (req,res)=>{
     try{
         const {name, sku, description, price, current_stock, reorder_level,supplier_id} = req.body;
-        
+        const result = await productSchema.validateAsync({name, sku, description, price, current_stock, reorder_level,supplier_id})
+        if(result.error){
+            return res.status(400).json({
+                successes:false,
+                message:result.error.details[0].message
+            })
+        }
         const newProduct = new productModel({name, sku, description, price, current_stock, reorder_level,supplier_id});
         await newProduct.save();
         const newProductSupplier = new productSupplierModel({product_id:newProduct._id,supplier_id})
@@ -70,6 +77,14 @@ exports.updateProduct = async (req,res)=>{
         if (reorder_level !== undefined) updateObj.reorder_level = reorder_level;
         if (supplier_id !== undefined) updateObj.supplier_id = supplier_id;
 
+        const result = await productSchema.validateAsync(updateObj)
+        if(result.error){
+            return res.status(400).json({
+                successes:false,
+                message:result.error.details[0].message
+            })
+        }
+        
         const response = await productModel.updateOne({_id:id},updateObj);
         
         const product = await productModel.findById(id);
