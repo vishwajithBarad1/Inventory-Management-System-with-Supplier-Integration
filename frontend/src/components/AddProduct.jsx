@@ -54,9 +54,16 @@ function AddProduct({getAllProducts}){
             setCurrentStock("");
             setReorderLevel("");
             setSupplierId("");
-        }catch(e){
-            console.error("Error creating product",e);
-            alert("Error creating product")
+        }catch(error){
+            if (error.response && error.response.data && error.response.data.message) {
+                if(error.response.data.message.includes('"name" with value')){
+                    alert("please provide a valid name with no numbers or spl characters");
+                    return;
+                }
+                alert(error.response.data.message);
+              } else {
+                  alert('An unexpected error occurred.');
+              }
         }
     }
     useEffect(()=>{
