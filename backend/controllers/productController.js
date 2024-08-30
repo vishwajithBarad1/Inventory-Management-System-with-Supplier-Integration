@@ -138,6 +138,7 @@ exports.updateProduct = async (req,res)=>{
 
 exports.deleteProduct = async (req,res)=>{
     try{
+        productUpadated = true;
         const id = req.query.id;
         const product = await productModel.findById(id);
         await UpdatestockValueHistory(req,res,(-1*product.current_stock));
