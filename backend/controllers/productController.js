@@ -4,7 +4,13 @@ const { productModel } = require("../models/productModel");
 const {productSupplierModel} = require("../models/productSupplierModel");
 const {stockValueHistoryModel} = require("../models/reportingModels");
 const { supplierModel } = require("../models/supplierModel");
-let productUpadated = true;
+(async ()=>{
+    try{
+        await client.set("productUpadated","true");
+    }catch(e){
+        console.log(e);
+    }
+    })();
 const UpdatestockValueHistory = async (req,res,quantity)=> {
     try{
         const latestStockValueHistory = await stockValueHistoryModel.find({}).sort({_id: -1});
@@ -22,7 +28,7 @@ const UpdatestockValueHistory = async (req,res,quantity)=> {
 
 exports.createProduct = async (req,res)=>{
     try{
-        productUpadated = true;
+        await client.set("productUpadated","true");
         const {name, sku, description, price, current_stock, reorder_level,supplier_id} = req.body;
         const result = await productSchema.validateAsync({name, sku, description, price, current_stock, reorder_level,supplier_id})
         if(result.error){
@@ -36,6 +42,7 @@ exports.createProduct = async (req,res)=>{
         const newProductSupplier = new productSupplierModel({product_id:newProduct._id,supplier_id})
         await newProductSupplier.save();
         await supplierModel.updateOne({_id:supplier_id},{ $push: {productsSupplied:newProduct._id}});
+        await client.set("supplierUpdated","true")
         UpdatestockValueHistory(req,res,current_stock);
 
         res.status(201).json({
@@ -56,14 +63,14 @@ exports.getAllProducts = async (req,res)=>{
         async function getProducts(){
             const allProducts = await productModel.find({isDeleted:false});
                 client.setEx("products",3600,JSON.stringify(allProducts));
-                productUpadated = false;
+                await client.set("productUpadated","false");
                 res.status(200).json({
                     success:true,
                     data:allProducts
                 });
         }
 
-        if(productUpadated){
+        if((await client.get("productUpadated"))=="true"){
             await getProducts();
             return
         }else{
@@ -88,7 +95,8 @@ exports.getAllProducts = async (req,res)=>{
 
 exports.updateProduct = async (req,res)=>{
     try{
-        productUpadated = true;
+
+        await client.set("productUpadated","true");
         const id = req.query.id;
         const {name, sku, description, price, current_stock, reorder_level,supplier_id} = req.body;
 
@@ -127,6 +135,7 @@ exports.updateProduct = async (req,res)=>{
                 message: "Product updated successfully"
             });
         }
+
     }catch(error){
         res.status(500).json({
             success:false,
@@ -137,19 +146,23 @@ exports.updateProduct = async (req,res)=>{
 
 exports.deleteProduct = async (req,res)=>{
     try{
-        productUpadated = true;
+        
         const id = req.query.id;
         const product = await productModel.findById(id);
+
         await UpdatestockValueHistory(req,res,(-1*product.current_stock));
+
         const response = await productModel.findById(id)
         const supplier_id = response.supplier_id
         response.isDeleted = true
         await response.save()
-        console.log(response);
-        const result = await supplierModel.updateOne(
+        await supplierModel.updateOne(
             { _id: supplier_id }, // Filter criteria to find the supplier
             { $pull: { productsSupplied: response._id } } // Update operation to remove the productId
         );
+
+        await client.set("supplierUpdated","true");
+
         res.status(200).json({
             success:true,
             message:"successfully deleted the product"
