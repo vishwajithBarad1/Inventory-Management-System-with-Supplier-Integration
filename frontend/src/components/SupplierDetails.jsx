@@ -7,7 +7,6 @@ function SupplierDetails({supplierId,name,contact_info, header,getAllSuppliers,s
     const [ContactInfo, setContactInfo] = useState(contact_info);
     const [supplierName, setSupplierName] = useState("");
     async function handleSubmit(){
-        setName(null);
         try{
             await axios.put(`http://localhost:4000/supplier/updateSupplier?id=${supplierId}`,
                 {
@@ -21,12 +20,22 @@ function SupplierDetails({supplierId,name,contact_info, header,getAllSuppliers,s
                 )
                 setSupplierName(null);
         }catch(error){
-            console.error(error);
-            alert("An error occurred while saving the changes. Please try again later.");
+            if (error.response && error.response.data && error.response.data.message) {
+                if(error.response.data.message.includes('"contact_info" with value')){
+                    alert("please provide a valid contact_info \nex: +91 9876543210");
+                    return;
+                  }
+                  if(error.response.data.message.includes('"name" with value')){
+                    alert("please provide a valid name with no numbers or spl characters");
+                    return;
+                  }
+                alert(error.response.data.message);
+              } else {
+                  alert('An unexpected error occurred.');
+              }
         }
     }
     async function handleDelete(){
-        setName(null);
         try{
             await axios.delete(`http://localhost:4000/supplier/deleteSupplier?id=${supplierId}`,{
                 headers: {
@@ -49,7 +58,7 @@ function SupplierDetails({supplierId,name,contact_info, header,getAllSuppliers,s
     return(
         supplierName===name?
             <div className="values_container">
-                <input className="product_values" type="text" value={name} onChange={(event)=>{setName(event.target.value);}}/>
+                <input className="product_values" type="text" value={Name} onChange={(event)=>{setName(event.target.value);}}/>
                 <input className="product_values" type="text" value={ContactInfo} onChange={(event)=>{setContactInfo(event.target.value);}}/>
                 <div className="product_values" style={{backgroundColor: '#fec590'}} ><button className="edit" onClick={handleSubmit}>submit</button><button className="delete" onClick={handleCancel}>cancel</button></div>
                 </div>
