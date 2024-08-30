@@ -2,8 +2,8 @@
 
 .dashboard-container {
     text-align: center;
-    padding: 50px;
-    background-color: #FFEAC5;
+    padding: 20px 40px 40px 40px;
+    background-color: #ffffff;
   }
   
   /* Title styling */
@@ -17,61 +17,70 @@
   /* Container for buttons */
   .dashboard-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 20px;
-  }
-  
+    padding: 10px;
+    background-color: #fffafa;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.svg-logout{
+  margin: 0px 10px 6px 20px;
+}
+.dashboard-buttons-avatar{
+    padding: 5px 5px 5px 15px;
+    background-color: rgba(255, 255, 255, 0.3); /* Transparent background */
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.dashboard-buttons-avatar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 0, 0, 0.5); /* Transparent background */
+  color: white;
+}
+
   /* Button styling */
   .dashboard-button {
-    padding: 15px 25px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #6C4E31;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+      padding: 15px 15px;
+      font-size: 18px;
+      color: #8B5E3C;
+      background-color: rgba(0, 0, 0, 0);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0px 10px;
   }
-  
   .dashboard-button:hover {
-    background-color: #603F26;
+    transform: translateY(-1px);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   }
-  
-  /* Responsive design for smaller screens */
   @media (max-width: 768px) {
     .dashboard-buttons {
       flex-direction: column;
-      gap: 15px;
+        gap: 15px;
     }
-  
+
     .dashboard-button {
-      width: 100%;
-      max-width: 300px;
+        padding: 10px 20px;
+        font-size: 16px;
     }
-  }
-  
-.logout{
-  cursor: pointer;
-  padding: 5px 10px;
-  background-color: rgb(255, 255, 255);
-  color: rgb(36, 36, 36);
-  border: none;
-  border-radius: 5px;
-  position: absolute;
-  top:40px;
-  right: 40px;
-  font-size: 18px;
-  box-shadow: 2px 2px 2px#4f4f4f;
 }
 
 
 .inventoryValues{
+  font-family: Arial, Helvetica, sans-serif;
   margin: 10px;
   border: 1px solid black;
   padding: 10px 20px;
-  border-radius: 19.5px;
-  color: wheat;
-  background-color: #6c4e31;
+  border-radius: 20px;
+  color: #8B5E3C;
+  background-color: #fff8dc;
   font-size: 18px;
 }
 
@@ -99,9 +108,11 @@ hr{
   border-radius: 10px;
   padding: 5px;
   margin :20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .reports-container{
+  margin: 30px;
   display: flex;
   justify-content: space-around;
 }
@@ -112,7 +123,7 @@ hr{
   border-radius: 10px;
   padding: 5px;
   margin :20px;
-
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .floating-window{
@@ -134,17 +145,16 @@ hr{
   font-size: 18px;
   font-family: Arial, Helvetica, sans-serif;
   height: 20px;
-  background-color: #fec590;
+  background-color: #fff8dc;
   border-radius: 10px;
   color: #603F26;
 }
 
 .mostSoldItems-Container{
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   margin: 20px 0px 0px 0px;
-  background-color: #fec5907a;
-  padding:0px 550px;
+  background-color: #fff8dc7a;
   border-radius: 10px;
 }
 
