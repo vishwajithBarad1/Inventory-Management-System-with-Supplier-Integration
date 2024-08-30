@@ -24,11 +24,19 @@ function ProductDetails({productId,name,sku,description,price,current_stock,stoc
                       Authorization: localStorage.getItem("authToken")
                     }
                   }
-                )
+                ) 
                 getAllProducts();
         }catch(error){
+            if (error.response && error.response.data && error.response.data.message) {
+                if(error.response.data.message.includes('"name" with value')){
+                    alert("please provide a valid name with no numbers or spl characters");
+                    return;
+                  }
+                alert(error.response.data.message);
+              } else {
+                  alert('An unexpected error occurred.');
+              }
             console.error(error);
-            alert("An error occurred while saving the changes. Please try again later.");
         }
     }
     async function handleDelete(){
@@ -54,7 +62,7 @@ function ProductDetails({productId,name,sku,description,price,current_stock,stoc
         setProductSKU(sku);
     }
     function getBackgroundColor(stock_value){
-        if(stock_value==="current_stock"){return "#FFDBB5";}
+        if(stock_value==="current_stock"){return "#fffaf0";}
         if((stock_value/stock)*100 <=25){return "#f38989";}
         if((stock_value/stock)*100 <=50){return "#f2b4a3";}
         if((stock_value/stock)*100 <=75){return "#ffdbc2";}
