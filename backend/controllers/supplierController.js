@@ -2,10 +2,16 @@ const { supplierModel } = require("../models/supplierModel");
 const {productSupplierModel} = require("../models/productSupplierModel");
 const { supplierSchema } = require("../middlewares/validationSchema");
 const { client } = require("../db/connectRedis");
-let supplierUpdated = true;
+(async ()=>{
+    try{
+        await client.set("supplierUpdated","true");
+    }catch(e){
+        console.log(e);
+    }
+    })();
 exports.createSupplier = async (req,res)=>{
     try{
-        supplierUpdated = true;
+        await client.set("supplierUpdated","true");
         const {name,contact_info} = req.body;
 
         const response = await supplierSchema.validateAsync({name,contact_info})
@@ -37,14 +43,14 @@ exports.getAllSuppliers = async (req,res)=>{
         async function getSuppliers(){
             const suppliers = await supplierModel.find({isDeleted:false});
             client.setEx("suppliers",3600,JSON.stringify(suppliers))
-            supplierUpdated = false;
+            await client.set("supplierUpdated","false");
             res.status(200).json({
                 success:true,
                 data:suppliers
             })
         }
 
-        if(supplierUpdated){
+        if((await client.get("supplierUpdated"))=="true"){
             await getSuppliers();
             return
         }else{
@@ -91,7 +97,7 @@ exports.updateSupplier = async (req,res)=>{
                 message:"cannot find the supplier"
             })
         }else{
-            supplierUpdated = true;
+            await client.set("supplierUpdated","true");
             res.status(200).json({
                 success: true,
                 message: "Supplier updated successfully"
@@ -107,7 +113,7 @@ exports.updateSupplier = async (req,res)=>{
 
 exports.deleteSupplier = async (req,res)=>{
     try{
-        supplierUpdated = true;
+        await client.set("supplierUpdated","true");
         const id = req.query.id;
         const response = await supplierModel.updateOne({_id:id},{isDeleted:true})
         if(!response.matchedCount){
