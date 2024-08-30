@@ -27,8 +27,8 @@ const StockValueOverTime = () => {
           borderColor: 'rgba(255, 99, 132, 1)',
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
           pointStyle: 'circle',
-          pointRadius: 10,
-          pointHoverRadius: 15,
+          pointRadius: 2,
+          pointHoverRadius: 5,
         }
       ],
     };
@@ -54,7 +54,7 @@ const StockValueOverTime = () => {
             );
             const data = response.data.data;
 
-            const X = data.map(item => (new Date(item.date)).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Kolkata' }));
+            const X = data.map(item => (new Date(item.date)).toLocaleDateString('en-IN', { month: 'numeric', day: '2-digit', timeZone: 'Asia/Kolkata' }));
             const Y = data.map(item => item.total_stock_value);
 
             setDataSetX(X);
