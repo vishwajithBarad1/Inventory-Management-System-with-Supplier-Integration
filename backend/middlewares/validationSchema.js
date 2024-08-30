@@ -6,13 +6,13 @@ const authSchema = Joi.object({
 });
 
 const productSchema = Joi.object({
-    name:Joi.string().regex(/^[A-Za-z\s]+$/).required(), 
+    name:Joi.string().required(), 
     sku:Joi.string().required(),
     description:Joi.string().required(), 
     price:Joi.number().positive().required(), 
     current_stock:Joi.number().positive().required(), 
-    reorder_level:Joi.number().positive().required(),
-    supplier_id:Joi.string().required()
+    reorder_level:Joi.number().positive(),
+    supplier_id:Joi.string()
 });
 
 const supplierSchema = Joi.object({
