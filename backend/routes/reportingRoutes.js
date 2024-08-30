@@ -7,5 +7,5 @@ router.get("/getAllproductSuppliers",reportingController.productsSupplied);
 router.get("/stockValueOverTime",reportingController.stockValueOverTime);
 router.get("/inventoryMovement",reportingController.inventoryMovement);
 router.get("/mostSoldItems",reportingController.mostSoldItems);
-
+router.get("/produsctsBelowRLevel",reportingController.produsctsBelowRLevel);
 module.exports = router
