@@ -2,7 +2,8 @@ const { orderSchema } = require("../middlewares/validationSchema");
 const { orderModel } = require("../models/orderModel");
 const {productModel} = require("../models/productModel");
 const {inventoryMovementModel,stockValueHistoryModel} = require("../models/reportingModels");
-
+const { client } = require("../db/connectRedis");
+let orderUpdated = true;
 const checkStock = async (req,res,product_id,quantity)=>{
     const product = await productModel.find({_id:product_id});
     // Check if stock is below reorder level
@@ -64,6 +65,7 @@ const updateStockLevel= async (id,value,quantity)=>{
 
 exports.createOrder = async (req,res)=>{
     try{
+        orderUpdated = true;
         const {product_id, quantity, order_date} = req.body;
         const result = await orderSchema.validateAsync({product_id, quantity});
         if(result.error){
@@ -97,11 +99,31 @@ exports.createOrder = async (req,res)=>{
 
 exports.getAllOrders = async (req,res)=>{
     try{
-        const allOrders = await orderModel.find({}).populate('product_id');;
-        res.status(200).json({
-            success:true,
-            data:allOrders
-        });
+        async function getOrders(){
+            const orders = await orderModel.find({}).populate('product_id');
+            client.setEx("orders",3600,JSON.stringify(orders));
+            orderUpdated = false;
+            res.status(200).json({
+                success:true,
+                data:orders
+            })
+        }
+        if(orderUpdated){
+            await getOrders();
+            return
+        }else{
+            const orders = JSON.parse(await client.get("orders"));
+            if(orders!==null){
+                res.status(200).json({
+                    success:true,
+                    data:orders,
+                    message:"data retrieved from cache"
+                })
+            }else{
+                await getOrders();
+                return
+            }
+        }
     }catch(error){
         res.status(500).json({
             success:false,
