@@ -64,7 +64,6 @@ exports.getAllProducts = async (req,res)=>{
         }
 
         if(productUpadated){
-            const allProducts = await productModel.find({isDeleted:false});
             await getProducts();
             return
         }else{
