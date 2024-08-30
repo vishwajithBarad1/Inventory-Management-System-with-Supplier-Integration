@@ -26,9 +26,24 @@ function AddSupplier({fetchSuppliers}){
             }else{
                 alert("Please fill in all fields")
             }
-        }catch(e){
-            console.error("Error creating product",e);
-            alert("Error creating supplier")
+        }catch(error){
+            if (error.response && error.response.data && error.response.data.message) {
+                if(error.response.data.message.includes('"contact_info" with value')){
+                    alert("please provide a valid contact_info \nex: +91 9876543210");
+                    return;
+                  }
+                  if(error.response.data.message.includes('duplicate key error')){
+                    alert("supplier with this name already exists");
+                    return;
+                  }
+                  if(error.response.data.message.includes('"name" with value')){
+                    alert("please provide a valid supplier name\nit should not include numbers or spl charectors");
+                    return;
+                  }
+                alert(error.response.data.message);
+              } else {
+                  alert('An unexpected error occurred.');
+              }
         }
     }
     
