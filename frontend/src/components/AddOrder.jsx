@@ -3,10 +3,18 @@ import { useState, useEffect } from "react";
 import "../styles/AddProduct.css"
 import axios from "axios";
 function AddOrder({getAllOrders}){
-    const [product_id,setProduct_id] = useState(null);
-    const [quantity,setQuantity] = useState(null);
-    const [order_date,setOrder_date] = useState(Date.now());
+    const [product_id,setProduct_id] = useState("");
+    const [quantity,setQuantity] = useState('');
+    const [order_date,setOrder_date] = useState('');
     const [products,setProducts] = useState([]);
+
+    function getCurrentDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
     async function createNewOrder(){
         try{
@@ -22,16 +30,19 @@ function AddOrder({getAllOrders}){
                       }
                     }
                   );
-                  getAllOrders();
-                  setProduct_id(null);
-                  setQuantity(null);
-                  setOrder_date(Date.now());
+                    getAllOrders();  
+                    setProduct_id('');
+                    setQuantity('');
+                    setOrder_date(getCurrentDate());
             }else{
                 alert("Please fill in all fields")
             }
-        }catch(e){
-            console.error("Error creating Order",e);
-            alert("Error creating Order")
+        }catch(error){
+            if (error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+              } else {
+                  alert('An unexpected error occurred.');
+              }
         }
     }
     
@@ -48,26 +59,52 @@ function AddOrder({getAllOrders}){
             alert("Error fetching products")
         }
     }
-    function handleChange(event){
+
+    function handleProductChange(event) {
         setProduct_id(event.target.value);
-        console.log({product_id});
     }
-    useEffect(()=>{
+
+    function handleQuantityChange(event) {
+        setQuantity(event.target.value);
+    }
+
+    function handleDateChange(event) {
+        setOrder_date(event.target.value);
+    }
+
+    useEffect(() => {
         getAllProducts();
-    },[]);
-    
-    return(
+    }, []);
+
+    return (
         <>
             <div className="inputBar">
-                <select className="selectProduct" onChange={handleChange}><option value="ProductName">Product Name</option>{products.map((product)=>{return <option value={product._id} > {product.name}</option>})}</select>
-                <input type="number" placeholder="Quantity" value={quantity} onChange={(event)=>{setQuantity(event.target.value);}}/>
-                <input type="date" placeholder="Date" value={order_date} onChange={(event)=>{setOrder_date(event.target.value);}}/>
+                <select className="selectProduct" value={product_id} onChange={handleProductChange}>
+                    <option value="">Product Name</option>
+                    {products.map((product) => (
+                        <option key={product._id} value={product._id}>
+                            {product.name}
+                        </option>
+                    ))}
+                </select>
+                <input
+                    type="number"
+                    placeholder="Quantity"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                />
+                <input
+                    type="date"
+                    placeholder="Date"
+                    value={order_date}
+                    onChange={handleDateChange}
+                />
             </div>
-            <div className="submitButton" style={{marginBottom:"30px"}} onClick={createNewOrder}>
+            <div className="submitButton" style={{ marginBottom: "30px" }} onClick={createNewOrder}>
                 Add Order
             </div>
         </>
-    )
+    );
 }
 
 export default AddOrder;
