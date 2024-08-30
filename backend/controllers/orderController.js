@@ -3,7 +3,7 @@ const { orderModel } = require("../models/orderModel");
 const {productModel} = require("../models/productModel");
 const {inventoryMovementModel,stockValueHistoryModel} = require("../models/reportingModels");
 const { client } = require("../db/connectRedis");
-let orderUpdated = true;
+(async ()=>{await client.set("orderUpdated", "true");})();
 const checkStock = async (req,res,product_id,quantity)=>{
     const product = await productModel.find({_id:product_id});
     // Check if stock is below reorder level
@@ -16,8 +16,9 @@ const checkStock = async (req,res,product_id,quantity)=>{
         });
         await newOrder.save();
 
-        product[0].current_stock=product[0].current_stock + product[0].stock-quantity; 
+        product[0].current_stock=product[0].current_stock + (product[0].stock)-(quantity); 
         await product[0].save();
+        await client.set("productUpadated", "true");
         //since product is restocked, we need to update newInventoryMovement
         const newInventoryMovement = new inventoryMovementModel({
             product_id,
@@ -53,10 +54,11 @@ const UpdatestockValueHistory = async (quantity)=> {
 
 const updateStockLevel= async (id,value,quantity)=>{
     try{
-        if(value=="Cancel"){
-            const product = await productModel.find({_id:id});
-            product[0].current_stock+=quantity;
-            await product[0].save();
+        if(value=="Cancelled"){
+            const product = await productModel.findById(id);
+            product.current_stock+=quantity;
+            await product.save();
+            await client.set("productUpadated","true")
         }
     }catch(error){
         throw new Error(error.message);
@@ -65,7 +67,7 @@ const updateStockLevel= async (id,value,quantity)=>{
 
 exports.createOrder = async (req,res)=>{
     try{
-        orderUpdated = true;
+        await client.set("orderUpdated","true");
         const {product_id, quantity, order_date} = req.body;
         const result = await orderSchema.validateAsync({product_id, quantity});
         if(result.error){
@@ -101,14 +103,14 @@ exports.getAllOrders = async (req,res)=>{
     try{
         async function getOrders(){
             const orders = await orderModel.find({}).populate('product_id');
-            client.setEx("orders",3600,JSON.stringify(orders));
-            orderUpdated = false;
+            await   client.setEx("orders",3600,JSON.stringify(orders));
+            await client.set("orderUpdated","false");
             res.status(200).json({
                 success:true,
                 data:orders
             })
         }
-        if(orderUpdated){
+        if((await client.get("orderUpdated"))=="true"){
             await getOrders();
             return
         }else{
@@ -135,10 +137,12 @@ exports.getAllOrders = async (req,res)=>{
 exports.changeStatus = (value)=>{
     return  async (req,res)=>{
         try{
+            client.set("orderUpdated","true")
             const id = req.query.id;
-            const order = await orderModel.find({_id:id});
-            updateStockLevel(id,value,order[0].quantity);
-            UpdatestockValueHistory(order[0].quantity);
+            const order = (await orderModel.find({_id:id}))[0];
+            const product_id = order.product_id
+            await updateStockLevel(product_id,value,order.quantity);
+            await UpdatestockValueHistory(order.quantity);
             const response = await orderModel.updateOne({_id:id},{status:value})
             if(!response.matchedCount){
                 return res.status(404).json({
