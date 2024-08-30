@@ -1,9 +1,10 @@
+const { client } = require("../db/connectRedis");
 const { productSchema } = require("../middlewares/validationSchema");
 const { productModel } = require("../models/productModel");
 const {productSupplierModel} = require("../models/productSupplierModel");
 const {stockValueHistoryModel} = require("../models/reportingModels");
 const { supplierModel } = require("../models/supplierModel");
-
+let productUpadated = true;
 const UpdatestockValueHistory = async (req,res,quantity)=> {
     try{
         const latestStockValueHistory = await stockValueHistoryModel.find({}).sort({_id: -1});
@@ -21,6 +22,7 @@ const UpdatestockValueHistory = async (req,res,quantity)=> {
 
 exports.createProduct = async (req,res)=>{
     try{
+        productUpadated = true;
         const {name, sku, description, price, current_stock, reorder_level,supplier_id} = req.body;
         const result = await productSchema.validateAsync({name, sku, description, price, current_stock, reorder_level,supplier_id})
         if(result.error){
@@ -50,11 +52,33 @@ exports.createProduct = async (req,res)=>{
 
 exports.getAllProducts = async (req,res)=>{
     try{
-        const allProducts = await productModel.find({isDeleted:false});
-        res.status(200).json({
-            success:true,
-            data:allProducts
-        });
+
+        async function getProducts(){
+            const allProducts = await productModel.find({isDeleted:false});
+                client.setEx("products",3600,JSON.stringify(allProducts));
+                productUpadated = false;
+                res.status(200).json({
+                    success:true,
+                    data:allProducts
+                });
+        }
+
+        if(productUpadated){
+            const allProducts = await productModel.find({isDeleted:false});
+            await getProducts();
+            return
+        }else{
+            const redis_allProducts = await client.get("products");
+            if(redis_allProducts!==null){
+                res.status(200).json({
+                    success:true,
+                    data:JSON.parse(redis_allProducts)
+                });
+            }else{
+                await getProducts();
+                return
+            }
+        }
     }catch(error){
         res.status(500).json({
             success:false,
@@ -65,6 +89,7 @@ exports.getAllProducts = async (req,res)=>{
 
 exports.updateProduct = async (req,res)=>{
     try{
+        productUpadated = true;
         const id = req.query.id;
         const {name, sku, description, price, current_stock, reorder_level,supplier_id} = req.body;
 
