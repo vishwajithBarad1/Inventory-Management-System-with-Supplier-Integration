@@ -1,9 +1,11 @@
 const { supplierModel } = require("../models/supplierModel");
 const {productSupplierModel} = require("../models/productSupplierModel");
 const { supplierSchema } = require("../middlewares/validationSchema");
-
+const { client } = require("../db/connectRedis");
+let supplierUpdated = true;
 exports.createSupplier = async (req,res)=>{
     try{
+        supplierUpdated = true;
         const {name,contact_info} = req.body;
 
         const response = await supplierSchema.validateAsync({name,contact_info})
@@ -32,11 +34,31 @@ exports.createSupplier = async (req,res)=>{
 
 exports.getAllSuppliers = async (req,res)=>{
     try{
-        const allSuppliers = await supplierModel.find({isDeleted:false});
-        res.status(200).json({
-            success:true,
-            data:allSuppliers
-        });
+        async function getSuppliers(){
+            const suppliers = await supplierModel.find({isDeleted:false});
+            client.setEx("suppliers",3600,JSON.stringify(suppliers))
+            supplierUpdated = false;
+            res.status(200).json({
+                success:true,
+                data:suppliers
+            })
+        }
+
+        if(supplierUpdated){
+            await getSuppliers();
+            return
+        }else{
+            const suppliers = JSON.parse(await client.get("suppliers"));
+            if(suppliers!==null){
+                res.status(200).json({
+                    success:true,
+                    data:suppliers
+                });
+            }else{
+                await getSuppliers();
+                return
+            }
+        }
     }catch(error){
         res.status(500).json({
             success:false,
@@ -69,6 +91,7 @@ exports.updateSupplier = async (req,res)=>{
                 message:"cannot find the supplier"
             })
         }else{
+            supplierUpdated = true;
             res.status(200).json({
                 success: true,
                 message: "Supplier updated successfully"
@@ -84,6 +107,7 @@ exports.updateSupplier = async (req,res)=>{
 
 exports.deleteSupplier = async (req,res)=>{
     try{
+        supplierUpdated = true;
         const id = req.query.id;
         const response = await supplierModel.updateOne({_id:id},{isDeleted:true})
         if(!response.matchedCount){
