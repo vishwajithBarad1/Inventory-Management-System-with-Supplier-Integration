@@ -28,16 +28,16 @@ function MovementOfInventory(){
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
             pointStyle: 'circle',
-            pointRadius: 10,
-            pointHoverRadius: 15,
+            pointRadius: 2,
+            pointHoverRadius: 5,
           },{
             label: 'sold',
             data: dataSetY2,
             borderColor: 'rgba(0, 156, 123, 1)',
             backgroundColor: 'rgba(0, 156, 123, 0.5)',
             pointStyle: 'circle',
-            pointRadius: 10,
-            pointHoverRadius: 15,
+            pointRadius: 2,
+            pointHoverRadius: 5,
           }
         ],
     };
