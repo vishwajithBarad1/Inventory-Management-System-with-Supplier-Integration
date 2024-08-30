@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import AddSupplier from "../components/AddSupplier";
 import SupplierDetails from "../components/SupplierDetails";
-
+import NavBar from "../components/NavBar";
 function SuppliersPage() {
     const navigate = useNavigate();
     const [suppliers, setSuppliers] = useState([]);
@@ -27,24 +27,11 @@ function SuppliersPage() {
     function getAllSuppliers(){
         fetchSuppliers();
     }
-    function handleLogout() {
-        localStorage.removeItem("authToken");
-        navigate("/");
-    }
 
     return (
         <div>
             <div className="dashboard-container">
-                <div className="dashboard-buttons">
-                    <button onClick={() => navigate('/dashboard')} className="dashboard-button">Dashboard</button>
-                    <button onClick={() => navigate('/product')} className="dashboard-button">Products</button>
-                    <button onClick={() => navigate('/suppliers')} className="dashboard-button">Suppliers</button>
-                    <button onClick={() => navigate('/orders')} className="dashboard-button">Orders</button>
-                    <button onClick={() => navigate('/reports')} className="dashboard-button">Reports</button>
-                </div>
-                <h1 className="dashboard-title" style={{ margin: "50px auto -30px auto" }}>Suppliers Details</h1>
-                <button className='logout' onClick={handleLogout}>Logout</button>
-                <hr />
+                <NavBar page={"supplier"}/>
                 <div className="addSupplierContainer">
                     <AddSupplier fetchSuppliers={getAllSuppliers} />
                 </div>

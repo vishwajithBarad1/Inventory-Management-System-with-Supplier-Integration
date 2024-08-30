@@ -3,15 +3,12 @@ import axios from "axios"
 import ProductDetails from "../components/ProductDetails"
 import { useNavigate } from 'react-router-dom';
 import AddProduct from "../components/AddProduct"
+import NavBar from "../components/NavBar";
 function Product(){
     const navigate = useNavigate();
     const [products,setProducts] = useState([]);
     const [productSKU,setProductSKU] = useState("");
     
-    function handleLogout(){
-        localStorage.removeItem("authToken");
-        navigate("/");
-    }
 
     async function getAllProducts(){
         try{
@@ -35,19 +32,8 @@ function Product(){
     return(
         <div>
             <div className="dashboard-container">
-                <div className="dashboard-buttons">
-                    <button onClick={() => navigate('/dashboard')} className="dashboard-button">Dashboard</button>
-                    <button onClick={() => navigate('/product')} className="dashboard-button">Products</button>
-                    <button onClick={() => navigate('/suppliers')} className="dashboard-button">Suppliers</button>
-                    <button onClick={() => navigate('/orders')} className="dashboard-button">Orders</button>
-                    <button onClick={() => navigate('/reports')} className="dashboard-button">Reports</button>
-                </div>
-                <h1 className = "dashboard-title" style={{margin:"50px auto 0px auto"}}>Product details</h1>
-                <hr />
+                <NavBar page={"product"}/>
                 <AddProduct getAllProducts={getAllProducts}/>
-            </div>
-            <div>
-                <button className='logout' onClick={handleLogout}>logout</button>
             </div>
             <ProductDetails name={"name"} sku={"sku"} description={"description"} price={"price"} current_stock={"current_stock"} productPage={true} header={true}></ProductDetails>
             {products.map((product) =>{return <ProductDetails productId = {product._id} name={product.name} sku={product.sku} description={product.description} price={product.price} current_stock={product.current_stock} stock={product.stock} productSKU={productSKU} setProductSKU = {setProductSKU} productPage={true} getAllProducts={getAllProducts} />})}
