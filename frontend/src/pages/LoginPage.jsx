@@ -7,35 +7,37 @@ function LoginPage() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState(true);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simple validation (could be more complex)
-    try{
+    try {
         if (name && password) {
-            if(login){
-                const response = await axios.post("http://localhost:4000/user/login",{name:name, password:password});
-                if(response.data.success){
-                    localStorage.setItem('authToken', response.data.token);
-                    navigate("/dashboard");
-                }
-            }else{
-                const response = await axios.post("http://localhost:4000/user/createUser",{name:name, password:password});
-                if(response.data.success){
-                    localStorage.setItem('authToken', response.data.token);
-                    navigate("/dashboard");
-                }
+            let response;
+            if (login) {
+                response = await axios.post("http://localhost:4000/user/login", { name, password });
+            } else {
+                response = await axios.post("http://localhost:4000/user/createUser", { name, password });
             }
-          } else {
+
+            if (response.data.success) {
+                localStorage.setItem('authToken', response.data.token);
+                navigate("/dashboard");
+            }
+        } else {
             alert('Please fill in both fields.');
+        }
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+          if(error.response.data.message.includes('"password" with value')){
+            alert("Invalid password, \nplease enter a stronger password with Minimum Length: Often, at least 8 characters. \n Maximum Length: Often, up to 20 or 30 characters. \nUppercase Letters: At least one uppercase letter (A-Z). \n Lowercase Letters: At least one lowercase letter (a-z). \nDigits: At least one numeric digit (0-9). \nSpecial Characters: At least one special character (e.g., !@#$%^&*).\nNo Spaces: No spaces allowed.");
+            return;
           }
-    }catch(error){
-        if(login){
-            alert("Login failed please try again");
-        }else{
-            alert("user alredy exists please try again");
+            alert(error.response.data.message);
+        } else {
+            alert('An unexpected error occurred.');
         }
     }
-  };
+};
   useEffect(()=>{
     if(localStorage.getItem('authToken')){
       navigate("/dashboard");
@@ -65,7 +67,8 @@ function LoginPage() {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        {login&&<button type="submit">Login</button>}
+        {!login&&<button type="submit">signin</button>}
       </form>
       {login?
         <div className='signup'>
