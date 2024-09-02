@@ -51,10 +51,10 @@ function AddSupplier({fetchSuppliers}){
         <>
             <div className="inputBar">
                 <input type="text" placeholder="Name" value={name} onChange={(event)=>{setName(event.target.value);}}/>
-                <input type="text" placeholder="contact_info" value={contact_info} onChange={(event)=>{setContact_info(event.target.value);}}/>
+                <input type="text" placeholder="Contact" value={contact_info} onChange={(event)=>{setContact_info(event.target.value);}}/>
             </div>
             <div className="submitButton" onClick={createNewSupplier}>
-                Add supplier
+                Add Supplier
             </div>
         </>
     )
