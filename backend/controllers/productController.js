@@ -117,12 +117,13 @@ exports.updateProduct = async (req,res)=>{
             })
         }
         
-        const response = await productModel.updateOne({_id:id},updateObj);
-        
         const product = await productModel.findById(id);
-        if(!(current_stock - product.current_stock)){
+        if((current_stock - product.current_stock)){
             await UpdatestockValueHistory(req,res,current_stock - product.current_stock);
         }
+        
+        const response = await productModel.updateOne({_id:id},updateObj);
+        
         
         if(!response.matchedCount){
             res.status(404).json({
@@ -147,6 +148,7 @@ exports.updateProduct = async (req,res)=>{
 exports.deleteProduct = async (req,res)=>{
     try{
         
+        await client.set("productUpadated","true");
         const id = req.query.id;
         const product = await productModel.findById(id);
 

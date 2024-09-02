@@ -75,6 +75,7 @@ exports.getAllSuppliers = async (req,res)=>{
 
 exports.updateSupplier = async (req,res)=>{
     try{
+        await client.set("supplierUpdated","true");
         const id = req.query.id;
         const {name,contact_info} = req.body;
 

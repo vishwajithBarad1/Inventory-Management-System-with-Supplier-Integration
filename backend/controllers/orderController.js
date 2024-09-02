@@ -7,7 +7,7 @@ const { client } = require("../db/connectRedis");
 const checkStock = async (req,res,product_id,quantity)=>{
     const product = await productModel.find({_id:product_id});
     // Check if stock is below reorder level
-    if(product[0].current_stock-quantity < product[0].reorder_level && product[0].current_stock - quantity > 0){
+    if(product[0].current_stock-quantity < product[0].reorder_level && product[0].current_stock - quantity >=0){
         const newOrder = new orderModel({
             product_id, 
             quantity:product[0].stock, 
@@ -15,7 +15,7 @@ const checkStock = async (req,res,product_id,quantity)=>{
             status: "Completed",
         });
         await newOrder.save();
-
+        await UpdatestockValueHistory((-1)*(product[0].stock))
         product[0].current_stock=product[0].current_stock + (product[0].stock)-(quantity); 
         await product[0].save();
         await client.set("productUpadated", "true");
@@ -67,6 +67,7 @@ const updateStockLevel= async (id,value,quantity)=>{
 
 exports.createOrder = async (req,res)=>{
     try{
+        await client.set("productUpadated","true");
         await client.set("orderUpdated","true");
         const {product_id, quantity, order_date} = req.body;
         const result = await orderSchema.validateAsync({product_id, quantity});
@@ -137,12 +138,13 @@ exports.getAllOrders = async (req,res)=>{
 exports.changeStatus = (value)=>{
     return  async (req,res)=>{
         try{
-            client.set("orderUpdated","true")
+            await client.set("productUpadated","true");
+            await client.set("orderUpdated","true")
             const id = req.query.id;
             const order = (await orderModel.find({_id:id}))[0];
             const product_id = order.product_id
             await updateStockLevel(product_id,value,order.quantity);
-            await UpdatestockValueHistory(order.quantity);
+            await UpdatestockValueHistory((value==="Cancelled"?(-1)*(order.quantity):order.quantity));
             const response = await orderModel.updateOne({_id:id},{status:value})
             if(!response.matchedCount){
                 return res.status(404).json({
