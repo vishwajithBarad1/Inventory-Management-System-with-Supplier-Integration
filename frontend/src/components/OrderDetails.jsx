@@ -4,11 +4,14 @@ import axios from "axios"
 function OrderDetails({orderId, product_id, quantity, order_date, status, getAllOrders, header, orderPage}){
     const [showDetail, setShowDetail] = useState(false);
 
-    function handleBackgroundColor(){
+    function handleColor(){
+        if(status ==="Status"){
+            return "#fff"
+        }
         if (status === "Cancelled"){
             return "rgba(255,0,0,0.5)"
-        }else{
-            return "rgba(0,255,0,0.5)"
+        } else{
+            return "#228B22"
         }
     }
     function handleMouseEnter(){
@@ -32,11 +35,16 @@ function OrderDetails({orderId, product_id, quantity, order_date, status, getAll
             console.log(error);
         }
     }
+    function handleHeader(){
+        if(header){
+            return {backgroundColor: "#555", color:"#fff"}
+        }
+    }
     return(
-        <div className="values_container" onMouseLeave={handleMouseLeave}> 
-            {showDetail?
+        <div className="values_container" onMouseLeave={handleMouseLeave} style={handleHeader()}> 
+            {showDetail && (!header)?
             <div>
-                <div className="product_values" style={{width:"208px",height:"33px"}}>{product_id.name}</div>
+                <p className="product_values" style={{width:"270px",height:"33px"}}>{product_id.name}</p>
                 <div style={{
                     position:"relative",
                     border: '1px solid #ccc',
@@ -55,14 +63,13 @@ function OrderDetails({orderId, product_id, quantity, order_date, status, getAll
                 </div>
             </div>
             :
-            <div className="product_values" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>{product_id.name}</div>}
-            <div className="product_values">{quantity}</div>
-            <div className="product_values">{order_date==="Date"?"Date":String(order_date).split("T")[0]}</div>
-            <div className="product_values" >{status}</div>
+            <p className="product_values" style={{padding:"0px 0px 0px 10px"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}  >{header?"Product":product_id.name}</p>}
+            <p className="product_values">{quantity}</p>
+            <p className="product_values">{order_date==="Date"?"Date":String(order_date).split("T")[0]}</p>
             {status==="Pending"?
-            <div className="product_values" ><button className="delete" onClick={handleCancel}>Cancel Order</button></div>
+            <div className="product_values" style={{padding:"10px 5px 10px 25px"}}> <button className="delete" onClick={handleCancel} >Cancel</button></div>
             :
-            <div className="product_values" style={{backgroundColor:handleBackgroundColor()}}></div>
+            <div className="product_values" style={{color:handleColor(),fontSize:"20px",borderRadius:"20px",padding:"2px",margin:"10px"}}>{status}</div>
             }
         </div>
     )
