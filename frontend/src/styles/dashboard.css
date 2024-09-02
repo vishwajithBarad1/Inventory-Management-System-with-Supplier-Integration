@@ -1,9 +1,11 @@
 /* Container for the dashboard */
-
+body{
+  background-color: #edf6f9;
+}
 .dashboard-container {
     text-align: center;
     padding: 20px 40px 40px 40px;
-    background-color: #ffffff;
+    background-color: #edf6f9;
   }
   
   /* Title styling */
@@ -20,7 +22,7 @@
     justify-content: space-between;
     gap: 20px;
     padding: 10px;
-    background-color: #fffafa;
+    background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
@@ -35,12 +37,11 @@
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 .dashboard-buttons-avatar:hover {
   transform: translateY(-3px);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-  background-color: rgba(255, 0, 0, 0.5); /* Transparent background */
   color: white;
 }
 
@@ -48,7 +49,7 @@
   .dashboard-button {
       padding: 15px 15px;
       font-size: 18px;
-      color: #8B5E3C;
+      color: #555;
       background-color: rgba(0, 0, 0, 0);
       border: none;
       border-radius: 8px;
@@ -57,9 +58,11 @@
       margin: 0px 10px;
   }
   .dashboard-button:hover {
-    transform: translateY(-1px);
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #555;
+    color: #fff;
   }
+
   @media (max-width: 768px) {
     .dashboard-buttons {
       flex-direction: column;
@@ -79,8 +82,8 @@
   border: 1px solid black;
   padding: 10px 20px;
   border-radius: 20px;
-  color: #8B5E3C;
-  background-color: #fff8dc;
+  color: #555;
+  background-color: #fff;
   font-size: 18px;
 }
 
@@ -104,7 +107,7 @@ hr{
 .stockValueOverTime-container{
   /* style={{width:"600px", backgroundColor:"#FFE9", borderRadius:"10px",padding:"5px"}} */
   width: 500px;
-  background-color: #ffe9;
+  background-color: #fff;
   border-radius: 10px;
   padding: 5px;
   margin :20px;
@@ -119,7 +122,7 @@ hr{
 
 .inventory-movement-container{
   width: 500px;
-  background-color: #ffe9;
+  background-color: #fff;
   border-radius: 10px;
   padding: 5px;
   margin :20px;
@@ -138,27 +141,38 @@ hr{
 }
 
 .productList{
-  border: 1px solid rgb(150, 150, 150);
   width: 500px;
   margin: 20px;
   padding: 10px;
   font-size: 18px;
   font-family: Arial, Helvetica, sans-serif;
   height: 20px;
-  background-color: #fff8dc;
+  background-color: #fff;
   border-radius: 10px;
-  color: #603F26;
+  color: #555;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .mostSoldItems-Container{
   display: flex;
   justify-content: space-around;
   margin: 20px 0px 0px 0px;
-  background-color: #fff8dc7a;
+  background-color: #fff;
   border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .mostSoldItems-Container h2{
   font-family: 'Courier New', Courier, monospace;
-  color: #603F26;
+  color: #555;
+  display: flex;
+  justify-content: space-around;
+}
+
+.products-card-container{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin:0px 40px;
+  font-size:80%;
 }
