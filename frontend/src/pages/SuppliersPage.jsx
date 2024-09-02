@@ -7,7 +7,14 @@ import NavBar from "../components/NavBar";
 function SuppliersPage() {
     const navigate = useNavigate();
     const [suppliers, setSuppliers] = useState([]);
+    const [searchQuery,setSearchQuery] = useState("");
+    const [isSearch, setIsSearch] = useState(false);
 
+    if(isSearch) {
+        const filteredSuppliers = suppliers.filter(supplier => (supplier.name.toLowerCase().includes(searchQuery.toLowerCase()) ));
+        setSuppliers(filteredSuppliers);
+        setIsSearch(false)
+    }
     const fetchSuppliers = async () => {
         try {
             const response = await axios.get("http://localhost:4000/supplier/getAllSuppliers", {
@@ -22,6 +29,10 @@ function SuppliersPage() {
     };
 
     useEffect(() => {
+        if(!localStorage.getItem("authToken")){
+            navigate("/");
+            return;
+        }
         fetchSuppliers();
     }, []);
     function getAllSuppliers(){
@@ -31,7 +42,7 @@ function SuppliersPage() {
     return (
         <div>
             <div className="dashboard-container">
-                <NavBar page={"supplier"}/>
+                <NavBar page={"supplier"} searchQuery={searchQuery} setIsSearch={setIsSearch} setSearchQuery={setSearchQuery} getProducts={getAllSuppliers}/>
                 <div className="addSupplierContainer">
                     <AddSupplier fetchSuppliers={getAllSuppliers} />
                 </div>
@@ -39,7 +50,7 @@ function SuppliersPage() {
                 <SupplierDetails 
                 supplierId={""}
                 name={"Name"}
-                contact_info={"contact_info"}
+                contact_info={"Contact"}
                 header={true}
                 />
                 {suppliers.map((supplier) => (
