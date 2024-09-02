@@ -80,10 +80,10 @@ function AddProduct({getAllProducts}){
                 <input type="number" placeholder="CurrentStock" value={currentStock} onChange={(event)=>{setCurrentStock(event.target.value);}}/>
                 <input type="number" placeholder="Price" value={price} onChange={(event)=>{setPrice(event.target.value);}}/>
                 <input type="number" placeholder="ReorderLevel" value={reorderLevel} onChange={(event)=>{setReorderLevel(event.target.value);}}/>
-                <select className="supplier" onChange={handleChange}><option value="supplierName">supplier Name</option>{suppliers.map((supplier)=>{return <option value={supplier._id}>{supplier.name}</option>})}</select>
+                <select className="supplier" onChange={handleChange} ><option value="supplierName">Supplier Name</option>{suppliers.map((supplier,index)=>{return <option key={index} value={supplier._id}>{supplier.name}</option>})}</select>
             </div>
             <div className="submitButton" onClick={createNewProduct}>
-                Add product
+                Add Product
             </div>
         </div>
     )

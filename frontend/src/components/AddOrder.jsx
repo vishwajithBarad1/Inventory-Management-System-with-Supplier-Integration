@@ -101,7 +101,7 @@ function AddOrder({getAllOrders}){
                 />
             </div>
             <div className="submitButton" style={{ marginBottom: "30px" }} onClick={createNewOrder}>
-                Add Order
+                Place Order
             </div>
         </>
     );

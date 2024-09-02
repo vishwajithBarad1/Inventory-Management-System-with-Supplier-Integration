@@ -52,10 +52,6 @@ const MostSoldItems = () => {
         getSoldItems();
     }, []);
 
-    useEffect(() => {
-        console.log(soldItems);
-    }, [soldItems]);
-
     return (
         <div className='mostSoldItems-Container'>
             <div>
