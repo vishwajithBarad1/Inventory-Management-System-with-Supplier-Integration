@@ -19,6 +19,7 @@ function SupplierDetails({supplierId,name,contact_info, header,getAllSuppliers,s
                   }
                 )
                 setSupplierName(null);
+                getAllSuppliers()
         }catch(error){
             if (error.response && error.response.data && error.response.data.message) {
                 if(error.response.data.message.includes('"contact_info" with value')){
@@ -55,17 +56,20 @@ function SupplierDetails({supplierId,name,contact_info, header,getAllSuppliers,s
     function handleEdit(){
         setSupplierName(name);
     }
+    function handleHeaderStyle(){
+        if(header)return{backgroundColor:"#555",color:"#fff"}
+    }
     return(
         supplierName===name?
             <div className="values_container">
                 <input className="product_values" type="text" value={Name} onChange={(event)=>{setName(event.target.value);}}/>
                 <input className="product_values" type="text" value={ContactInfo} onChange={(event)=>{setContactInfo(event.target.value);}}/>
-                <div className="product_values" style={{backgroundColor: '#fec590'}} ><button className="edit" onClick={handleSubmit}>submit</button><button className="delete" onClick={handleCancel}>cancel</button></div>
+                <div className="product_values" style={{backgroundColor: '#fec590',padding:"10px 0px"}} ><button className="edit" onClick={handleSubmit}>submit</button><button className="delete" onClick={handleCancel}>cancel</button></div>
                 </div>
-        :<div className="values_container">
-            <div className="product_values">{name}</div>
-            <div className="product_values">{ContactInfo}</div>
-            {!supplierPage || header?header?<div className="product_values"></div>:<></>:<div className="product_values"><button className="edit" onClick={handleEdit}>edit</button><button className="delete" onClick={handleDelete} >delete</button></div>}
+        :<div className="values_container" style={handleHeaderStyle()}>
+            <p className="product_values">{name}</p>
+            <p className="product_values">{ContactInfo}</p>
+            {!supplierPage || header?header?<div className="product_values" ></div>:<></>:<div className="product_values" style={{padding:"10px 0px"}}><button className="edit" onClick={handleEdit}>edit</button><button className="delete" onClick={handleDelete} >delete</button></div>}
         </div>
     )
 }
