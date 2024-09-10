@@ -16,7 +16,6 @@ function SearchBar({setIsSearch,setSearchQuery, getProducts}){
         }else{
             setIsSearch(false)
             setQuery("")
-            console.log("getting products...")
             getProducts();
         }
     }

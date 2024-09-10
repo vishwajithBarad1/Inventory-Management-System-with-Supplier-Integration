@@ -1,6 +1,6 @@
 const orderModel = require("../models/orderModel");
 const userModel = require("../models/userModel");
-const productModel = require("../models/productModel");
+const {productModel} = require("../models/productModel");
 const { productSupplierModel } = require("../models/productSupplierModel");
 const { stockValueHistoryModel,inventoryMovementModel } = require("../models/reportingModels");
 
@@ -34,20 +34,24 @@ exports.noOfUsers = async (req,res)=>{
     }
 }
 
-exports.produsctsBelowRLevel = async (req,res)=>{
+exports.dashboardReport = async (req,res)=>{
     try{
-        const allProducts = productModel.find({});
+        const allProducts = await productModel.find({isDeleted:false});
         const produsctsBelowRLevel = [];
+        const totalProducts = allProducts.length;
+        const totalStockValue = allProducts.reduce((sum,product)=>sum+product.current_stock,0);
         for(let product in allProducts){
-            if(product[current_stock]<product[reorder_level]){
+            if(product.current_stock<product.reorder_level){
                 produsctsBelowRLevel.push(product) 
             }
         }
+        const result = {produsctsBelowRLevel:produsctsBelowRLevel.length, totalStockValue:totalStockValue, totalProducts}
         res.status(200).json({
             success:true,
-            data:produsctsBelowRLevel
+            data:result
         })
     }catch(error){
+        console.log(error)
         res.status(500).json({
             success:false,
             message:error.message
@@ -111,11 +115,6 @@ exports.inventoryMovement = async (req,res)=>{
     }
 }
 
-
-
-
-
-
 exports.mostSoldItems = async (req, res) => {
     try {
         // Fetch and aggregate sold products
@@ -171,5 +170,24 @@ exports.mostSoldItems = async (req, res) => {
             success: false,
             message: error.message
         });
+    }
+}
+
+
+exports.ordersWrtDate = async function(req,res){
+    try{
+        const {startDate, endDate} = req.body;
+        const orders = await orderModel.find({order_date: {$gte:startDate, $lte: endDate}});
+        const sales = await inventoryMovementModel.find({movement_type:"sale", movement_date: {$gte:startDate, $lte: endDate}});
+        const restocks = await inventoryMovementModel.find({movement_type:"restock", movement_date: {$gte:startDate, $lte: endDate}});
+        res.status(200).json({
+            success:true,
+            data:{orders,sales,restocks}
+        })
+    }catch(error){
+        res.status(500).json({
+            success:false,
+            message:error.message
+        })
     }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import axios from "axios"
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,6 +16,7 @@ import {
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function MovementOfInventory(){
+    const navigate = useNavigate();
     const chartRef = useRef(null);
     const [dataSetY1,setDataSetY1] = useState([])
     const [dataSetY2,setDataSetY2] = useState([])
@@ -69,6 +71,11 @@ function MovementOfInventory(){
             setDataSetY2(saleMovement);
         }catch(error){
             console.error(error);
+            if(error.response.data.message=="jwt expired"){
+                localStorage.removeItem("authToken");
+                navigate("/");
+                return;
+            }
         }
       }
       useEffect(()=>{

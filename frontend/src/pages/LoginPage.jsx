@@ -47,14 +47,14 @@ function LoginPage() {
       navigate("/dashboard");
       return;
     }
-  },[])
+  })
   return (
     <div className='container'>
     <div className='loginContainer'>
       {login?<h2>Login</h2>:<h2>sign-up</h2>}
       <form onSubmit={handleSubmit}>
         <div className='inputContainer'>
-          <label>name:</label>
+          <label>Name:</label>
           <input
             type="text"
             value={name}
@@ -76,9 +76,9 @@ function LoginPage() {
       </form>
       {login?
         <div className='signup'>
-          Not a user? <a onClick={()=>{setLogin(false)}}>Sign up</a>
+          Not a user? <button onClick={()=>{setLogin(false)}}>Sign up</button>
         </div>:<div className='signup'>
-          Have an account? <a onClick={()=>{setLogin(true)}}>Login</a>
+          Have an account? <button onClick={()=>{setLogin(true)}}>Login</button>
         </div>
         }
     </div>

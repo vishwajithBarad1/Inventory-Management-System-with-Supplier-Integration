@@ -14,18 +14,17 @@ function ReportsPage(){
     }, []);
     return(
         <div style={{height:"100vw"}}>
-            <div className="dashboard-container" >
-                <NavBar page={"report"}/>
-                <div className="reports-container">
-                <div className="stockValueOverTime-container">
-                    <StockValueOverTime/>
-                </div>
-                <div className="inventory-movement-container">
-                    <MovementOfInventory/>
-                </div>
-                </div>
-                <MostSoldItems/>
+            <NavBar page={"report"}/>
+            <div className="reports-container">
+            <div className="stockValueOverTime-container">
+                <StockValueOverTime/>
             </div>
+            <div className="inventory-movement-container">
+                <MovementOfInventory/>
+            </div>
+            </div>
+            <MostSoldItems/>
+            
         </div>
     )
 }

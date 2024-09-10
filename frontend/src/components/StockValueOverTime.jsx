@@ -11,10 +11,12 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const StockValueOverTime = () => {
+    const navigate = useNavigate()
     const chartRef = useRef(null);
     const [dataSetY,setDataSetY] = useState([])
     const [dataSetX,setDataSetX] = useState([]);
@@ -62,6 +64,11 @@ const StockValueOverTime = () => {
         } catch (error) {
             console.error("Error getting stock value over time", error);
             alert("Error getting stock value over time");
+            if(error.response.data.message=="jwt expired"){
+                localStorage.removeItem("authToken");
+                navigate("/");
+                return;
+            }
         }
     }
     useEffect(()=>{

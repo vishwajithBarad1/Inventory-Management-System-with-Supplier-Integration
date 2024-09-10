@@ -1,7 +1,10 @@
 import { useState } from "react";
 import "../styles/ProductDetails.css"
 import axios from "axios"
+import { useNavigate } from "react-router-dom";
 function OrderDetails({orderId, product_id, quantity, order_date, status, getAllOrders, header, orderPage}){
+    const navigate = useNavigate()
+
     const [showDetail, setShowDetail] = useState(false);
 
     function handleColor(){
@@ -33,6 +36,11 @@ function OrderDetails({orderId, product_id, quantity, order_date, status, getAll
         }catch(error){
             alert(error.message);
             console.log(error);
+            if(error.response.data.message=="jwt expired"){
+                localStorage.removeItem("authToken");
+                navigate("/");
+                return;
+            }
         }
     }
     function handleHeader(){
