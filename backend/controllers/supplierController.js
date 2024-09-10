@@ -41,7 +41,7 @@ exports.createSupplier = async (req,res)=>{
 exports.getAllSuppliers = async (req,res)=>{
     try{
         async function getSuppliers(){
-            const suppliers = await supplierModel.find({isDeleted:false});
+            const suppliers = req.paginatedResults;
             client.setEx("suppliers",3600,JSON.stringify(suppliers))
             await client.set("supplierUpdated","false");
             res.status(200).json({

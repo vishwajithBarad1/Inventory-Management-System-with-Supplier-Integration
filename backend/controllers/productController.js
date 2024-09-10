@@ -61,7 +61,7 @@ exports.getAllProducts = async (req,res)=>{
     try{
 
         async function getProducts(){
-            const allProducts = await productModel.find({isDeleted:false});
+            const allProducts = req.paginatedResults;
                 client.setEx("products",3600,JSON.stringify(allProducts));
                 await client.set("productUpadated","false");
                 res.status(200).json({

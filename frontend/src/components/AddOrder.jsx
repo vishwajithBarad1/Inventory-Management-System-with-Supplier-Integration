@@ -48,12 +48,12 @@ function AddOrder({getAllOrders}){
     
     async function getAllProducts(){
         try{
-            const response = await axios.get("http://localhost:4000/product/getAllProducts",{
+            const response = await axios.get(`http://localhost:4000/product/getAllProducts?order=1`,{
                 headers:{
                     'Authorization':localStorage.getItem("authToken")
                 }
             });
-            setProducts(response.data.data);
+            setProducts(response.data.data.data);
         }catch(e){
             console.error("Error fetching products",e);
             alert("Error fetching products")

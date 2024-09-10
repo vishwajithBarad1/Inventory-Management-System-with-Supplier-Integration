@@ -16,12 +16,12 @@ function AddProduct({getAllProducts}){
     }
     async function getSuppliers(){
         try{
-            const response = await axios.get("http://localhost:4000/supplier/getAllSuppliers",{
+            const response = await axios.get("http://localhost:4000/supplier/getAllSuppliers?order=1",{
                 headers: {
                     Authorization: localStorage.getItem("authToken")
                 }
             });
-            setSuppliers(response.data.data);
+            setSuppliers(response.data.data.data);
         }catch(e){
             console.error("Error getting suppliers",e);
             alert("Error getting suppliers")

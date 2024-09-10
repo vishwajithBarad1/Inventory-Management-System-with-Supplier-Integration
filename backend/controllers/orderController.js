@@ -103,7 +103,7 @@ exports.createOrder = async (req,res)=>{
 exports.getAllOrders = async (req,res)=>{
     try{
         async function getOrders(){
-            const orders = await orderModel.find({}).populate('product_id');
+            const orders = req.paginatedResults;
             await   client.setEx("orders",3600,JSON.stringify(orders));
             await client.set("orderUpdated","false");
             res.status(200).json({
@@ -111,11 +111,12 @@ exports.getAllOrders = async (req,res)=>{
                 data:orders
             })
         }
-        if((await client.get("orderUpdated"))=="true"){
+        if((await client.get("orderUpdated"))==="true"){
             await getOrders();
             return
         }else{
             const orders = JSON.parse(await client.get("orders"));
+            console.log({orders});
             if(orders!==null){
                 res.status(200).json({
                     success:true,
