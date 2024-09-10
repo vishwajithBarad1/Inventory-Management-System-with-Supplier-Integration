@@ -21,6 +21,8 @@ const supplierSchema = mongoose.Schema({
     }
 )
 
+supplierSchema.index({name:"text",contact_info:"text"});
+
 const supplierModel = mongoose.model("Supplier",supplierSchema);
 
 module.exports = {supplierModel}

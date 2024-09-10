@@ -23,6 +23,8 @@ const orderSchema = mongoose.Schema({
     }
 )
 
+orderSchema.index({status:"text"});
+
 const orderModel = mongoose.model("Order",orderSchema);
 
 module.exports = {orderModel}
