@@ -7,6 +7,7 @@
     margin: 10px;
     border-radius: 10px;
     border: 2px solid #5555553b;
+    box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.1);
 }
 .values_container-dashboard{
     color: rgb(75, 75, 75);
@@ -66,7 +67,6 @@
 }
 
 .products-container{
-    margin: 0px 50px;
-    padding: 10px;
+    margin: 0px 40px;
     border-radius: 10px;
 }
