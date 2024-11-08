@@ -36,6 +36,10 @@ function LoginPage() {
             alert("Invalid name, \nplease enter a valid name with no special characters");
             return;
           }
+          if(error.response.data.message.includes('E11000 duplicate key error collection:')){
+            alert("user already exists, try logging in");
+            return;
+          }
             alert(error.response.data.message);
         } else {
             alert('An unexpected error occurred.');
